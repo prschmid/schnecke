@@ -103,7 +103,17 @@ jobs:
 workflows:
   version: 2
   commit:
-    test:
-      jobs:
-        - quality
-        - test
+    jobs:
+      - quality
+      - test
+  nightly:
+    jobs:
+      - quality
+      - test
+    triggers:
+      - schedule:
+          cron: "0 2 * * *"
+          filters:
+            branches:
+              only:
+                - main
