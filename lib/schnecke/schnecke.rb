@@ -10,9 +10,11 @@ module Schnecke
 
   DEFAULT_SLUG_COLUMN = :slug
   DEFAULT_SLUG_SEPARATOR = '-'
+  DEFAULT_MAX_LENGTH = 32
   DEFAULT_REQUIRED_FORMAT = /\A[a-z0-9\-_]+\z/
 
   class_methods do
+    # rubocop:disable Metrics/AbcSize
     def slug(source, opts = {})
       class_attribute :schnecke_config
 
@@ -21,6 +23,7 @@ module Schnecke
         slug_source: source,
         slug_column: opts.fetch(:column, DEFAULT_SLUG_COLUMN),
         slug_separator: opts.fetch(:separator, DEFAULT_SLUG_SEPARATOR),
+        limit_length: opts.fetch(:limit_length, DEFAULT_MAX_LENGTH),
         required: opts.fetch(:required, true),
         generate_on_blank: opts.fetch(:generate_on_blank, true),
         require_format: opts.fetch(:require_format, DEFAULT_REQUIRED_FORMAT),
@@ -50,6 +53,7 @@ module Schnecke
       include InstanceMethods
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Instance methods to include
   module InstanceMethods
@@ -73,6 +77,9 @@ module Schnecke
       if candidate_slug.blank? && schnecke_config[:generate_on_blank]
         candidate_slug = slugify_blank
       end
+
+      # Make sure it is not too long
+      candidate_slug = truncate(candidate_slug)
 
       # If there is a duplicate, create a unique one
       if slug_exists?(candidate_slug)
@@ -176,6 +183,13 @@ module Schnecke
         slugify(send(part))
       end
       parts.join(schnecke_config[:slug_separator])
+    end
+
+    def truncate(slug)
+      return if slug.blank?
+      return if schnecke_config[:limit_length].blank?
+
+      slug[0, schnecke_config[:limit_length]]
     end
 
     def slug_exists?(slug)

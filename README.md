@@ -53,6 +53,25 @@ end
 
 The above will place the generated slug in `some_other_column`.
 
+### Setting the maximum length of a slug
+
+By default the maxium length of a slug is 32 characters *NOT INCLUDING* any potential sequence numbers added to make it unique (see the "Handling non-unique slugs" section). You can either change the maximum or remove it entirely as follows
+
+
+```ruby
+class A
+  include Schnecke
+  slug :name, limit_length: 15
+end
+```
+
+```ruby
+class A
+  include Schnecke
+  slug :name, limit_length: false
+end
+```
+
 ### Slug Uniquness
 
 By default slugs are unique to the object that defines the slug. For example if we have the 2 objects, `A` and `B` as defined as below, then the slugs will be unique for all slugs for all type `A` objcets and all type `B` objects. 
@@ -75,6 +94,8 @@ This means that the slug `foo` can exists 2 times; once for any object of type `
 
 If a duplicate slug is to be created, a number is automatically appended to the end of the slug. For example, if there is a slug `foo`, the second one would become `foo-2`, the third `foo-3`, and so forth.
 
+It is important to note that the maximum length of a slug does not include the addition of the sequence identifier at the end. By default the maximum length of a slug is 32 characters, but if a sequence number is added, it will be 34 characters when we append the `-2`, `-3`, etc. This was done on purpose so that the base slug always remains constant and does not get truncated.
+
 ### Defining a custom uniqueness scope
 
 There are times when we want slugs not be unique for all objects of type `A`, but rather for a smaller scope. For example, let's say we have a system with multiple `Accounts`, each containing `Record`s. If we want the slug for the `Record` to be unique only within the scope of an `account` we can do by providing the uniqueness scope when setting up the slug.
@@ -82,7 +103,7 @@ There are times when we want slugs not be unique for all objects of type `A`, bu
 ```ruby
 class Record
   include Schnecke
-  slug :name, uniqueness: { scope: :account}
+  slug :name, uniqueness: { scope: :account }
 
   belongs_to :account
 end
@@ -93,7 +114,7 @@ When we do this, this will let us have the same slug 'foo' for multiple `record`
 ```ruby
 class Tag
   include Schnecke
-  slug :name, uniqueness: { scope: [:account, :record]}
+  slug :name, uniqueness: { scope: [:account, :record] }
 
   belongs_to :account
   belongs_to :record
