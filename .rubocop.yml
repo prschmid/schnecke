@@ -1,0 +1,52 @@
+require:
+  - 'rubocop-performance'
+  - 'rubocop-rails'
+  - 'rubocop-minitest'
+  - 'rubocop-rake'
+
+AllCops:
+  NewCops: enable
+  # Don't run rubocop on these files/directories
+  Exclude:
+    - '**/templates/**/*'
+    - '**/vendor/**/*'
+    - 'actionpack/lib/action_dispatch/journey/parser.rb'
+    - 'lib/templates/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+
+Layout/LineLength:
+  Max: 80
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - 'test/**/*'
+
+Metrics/BlockLength:
+  Max: 40
+  Exclude:
+    - 'test/**/*'
+
+Metrics/ClassLength:
+  Max: 150
+  Exclude:
+    - 'test/**/*'
+
+Metrics/MethodLength:
+  Max: 35
+  Exclude:
+    - 'test/**/*'
+
+Metrics/ModuleLength:
+  Max: 100
+
+Minitest/MultipleAssertions:
+  Max: 10
+
+Rails/RefuteMethods:
+  Exclude:
+    - 'test/**/*'
