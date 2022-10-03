@@ -42,14 +42,14 @@ end
 
 Under the hood, this library adds a `before_validate` callback that automatically runs a method called `assign_slug`. You are welcome to call this method explicity if you so desire.
 
-```
+```ruby
 obj = SomeObject.new(name: 'Hello World!')
 obj.assign_slug
 ```
 
-It is important to note that if the attribute used to hold the slug (`slug` by default, see next section) already contains a value, the slug assignment **WILL NOT HAPPEN**. This means, if you manually assign the slug by explicitly setting the slug value yourself, it will not be modified. If you would like the slug to be overwrriten you can call the `reassign_slug` method.
+It is important to note that if the attribute used to hold the slug (`slug` by default, see next section) already contains a value, the slug assignment **WILL NOT HAPPEN**. This means, if you manually assign the slug by explicitly setting the slug value yourself, it will not be modified. If you would like the slug to be overwrriten you can explicitly call the `reassign_slug` method.
 
-```
+```ruby
 obj = SomeObject.new(name: 'Hello World!', slug: 'hi')
 
 # This will do nothing as the slug was already set
