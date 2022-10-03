@@ -44,6 +44,8 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Max: 100
+  Exclude:
+    - 'lib/schnecke/schnecke.rb'
 
 Minitest/MultipleAssertions:
   Max: 10

@@ -64,7 +64,47 @@ module Schnecke
     # Note, a slug will not be assigned if one already exists. If one needs to
     # force the assignment of a slug, pass `force: true`
     def assign_slug(opts = {})
-      validate_source
+      before_assign_slug(opts)
+      perform_slug_assign(opts)
+      after_assign_slug(opts)
+    end
+
+    # Reassign the slug
+    #
+    # Unlike assign_slug, this will cause a slug to be created even if one
+    # already exists.
+    def reassign_slug(opts = {})
+      opts[:force] = true
+      assign_slug(opts)
+    end
+
+    # Callback that is handled before the slug assignment process.
+    #
+    # When this is called, no validations, or decisions about whether or not
+    # a slug should be created have been made. As such, this will always run
+    # regardless of whether or not the slug assignment process proceeds or not.
+    def before_assign_slug(opts = {})
+      # Left blank, but can be implemented by user
+    end
+
+    # Callback that is handled after the slug is assigned
+    #
+    # Unless an error is raised during the slug assignment process, this method
+    # will always be called regardless of whether or not the slug was assigned
+    def after_assign_slug(opts = {})
+      # Left blank, but can be implemented by user
+    end
+
+    protected
+
+    # Assign the slug
+    #
+    # This is automatically called before model validation.
+    #
+    # Note, a slug will not be assigned if one already exists. If one needs to
+    # force the assignment of a slug, pass `force: true`
+    def perform_slug_assign(opts = {})
+      validate_slug_source
       validate_slug_column
 
       return if !should_create_slug? && !opts[:force]
@@ -79,7 +119,7 @@ module Schnecke
       end
 
       # Make sure it is not too long
-      candidate_slug = truncate(candidate_slug)
+      candidate_slug = truncate_slug(candidate_slug)
 
       # If there is a duplicate, create a unique one
       if slug_exists?(candidate_slug)
@@ -89,16 +129,6 @@ module Schnecke
       self[schnecke_config[:slug_column]] = candidate_slug
     end
 
-    # Reassign the slug
-    #
-    # Unlike assign_slug, this will cause a slug to be created even if one
-    # already exists.
-    def reassign_slug
-      assign_slug(force: true)
-    end
-
-    protected
-
     # Slugify a string
     #
     # This will take a string and convert it to a slug by removing punctuation
@@ -106,9 +136,9 @@ module Schnecke
     #
     # This can be overriden if a different slug generation method is needed
     def slugify(str)
-      return if str.blank?
+      return str if str.blank?
 
-      str.gsub!(/[\p{Pc}\p{Ps}\p{Pe}\p{Pi}\p{Pf}\p{Po}]/, '')
+      str = str.gsub(/[\p{Pc}\p{Ps}\p{Pe}\p{Pi}\p{Pf}\p{Po}]/, '')
       str.parameterize
     end
 
@@ -131,7 +161,7 @@ module Schnecke
     #
     # This can be overriden if a different behavior is desired
     def slugify_duplicate(slug)
-      return if slug.blank?
+      return slug if slug.blank?
 
       seq = 2
       new_slug = slug_concat([slug, seq])
@@ -156,7 +186,7 @@ module Schnecke
 
     private
 
-    def validate_source
+    def validate_slug_source
       source = arrayify(schnecke_config[:slug_source])
       source.each do |attr|
         unless respond_to?(attr)
@@ -185,9 +215,9 @@ module Schnecke
       parts.join(schnecke_config[:slug_separator])
     end
 
-    def truncate(slug)
-      return if slug.blank?
-      return if schnecke_config[:limit_length].blank?
+    def truncate_slug(slug)
+      return slug if slug.blank?
+      return slug if schnecke_config[:limit_length].blank?
 
       slug[0, schnecke_config[:limit_length]]
     end
