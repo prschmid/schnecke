@@ -37,6 +37,39 @@ class SchneckeTest < Minitest::Test
     assert_equal 'test-schnecke', obj.slug
   end
 
+  def test_assign_slug_does_not_assign_slug_if_one_is_already_present
+    create_dummy_schnecke_models_table
+
+    obj = DummySchneckeModel.new(name: 'Test Schnecke', slug: 'already-has-one')
+    assert_equal 'already-has-one', obj.slug
+
+    obj.assign_slug
+
+    assert_equal 'already-has-one', obj.slug
+  end
+
+  def test_reassign_slug_assigns_slugified_form_of_name_if_no_slug_present
+    create_dummy_schnecke_models_table
+
+    obj = DummySchneckeModel.new(name: 'Test Schnecke')
+    assert_nil obj.slug
+
+    obj.reassign_slug
+
+    assert_equal 'test-schnecke', obj.slug
+  end
+
+  def test_reassign_slug_assign_slug_if_one_is_already_present
+    create_dummy_schnecke_models_table
+
+    obj = DummySchneckeModel.new(name: 'Test Schnecke', slug: 'already-has-one')
+    assert_equal 'already-has-one', obj.slug
+
+    obj.reassign_slug
+
+    assert_equal 'test-schnecke', obj.slug
+  end
+
   def test_raises_invalid_record_if_slug_is_not_parameterized
     create_dummy_schnecke_models_table
 
@@ -218,6 +251,35 @@ class SchneckeTest < Minitest::Test
     assert_equal 'child-of-parent-2', child22.slug
   end
 
+  def test_before_assign_slug_is_called_before_the_slug_assignment
+    create_dummy_schnecke_before_assignment_callback_models_table
+
+    obj = DummySchneckeBeforeAssignmentCallbackModel.new(
+      name: 'This will be overwrriten by the before assign callback'
+    )
+    assert_nil obj.slug
+
+    obj.assign_slug
+
+    assert_equal 'BEFORE ASSIGN', obj.name
+    assert_equal 'before-assign', obj.slug
+  end
+
+  def test_after_assign_slug_is_called_after_the_slug_assignment
+    create_dummy_schnecke_after_assignment_callback_models_table
+
+    obj = DummySchneckeAfterAssignmentCallbackModel.new(
+      name: 'This name will stay the same. Slug will be changed.'
+    )
+    assert_nil obj.slug
+
+    obj.assign_slug
+
+    assert_equal 'This name will stay the same. Slug will be changed.',
+                 obj.name
+    assert_equal 'changed-after-assign', obj.slug
+  end
+
   private
 
   def create_dummy_schnecke_models_table
@@ -315,6 +377,42 @@ class SchneckeTest < Minitest::Test
       with_columns do |t|
         t.string :dummy_schnecke_association_model_type, null: false
         t.bigint :dummy_schnecke_association_model_id, null: false
+        t.string :name, null: false, default: 'first'
+        t.string :slug
+      end
+    end
+  end
+
+  def create_dummy_schnecke_before_assignment_callback_models_table
+    Temping.create :dummy_schnecke_before_assignment_callback_models do
+      include Schnecke
+      slug :name
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def before_assign_slug(_opts = {})
+        self.name = 'BEFORE ASSIGN'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
+
+      with_columns do |t|
+        t.string :name, null: false, default: 'first'
+        t.string :slug
+      end
+    end
+  end
+
+  def create_dummy_schnecke_after_assignment_callback_models_table
+    Temping.create :dummy_schnecke_after_assignment_callback_models do
+      include Schnecke
+      slug :name
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def after_assign_slug(_opts = {})
+        self.slug = 'changed-after-assign'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
+
+      with_columns do |t|
         t.string :name, null: false, default: 'first'
         t.string :slug
       end

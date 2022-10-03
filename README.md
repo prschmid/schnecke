@@ -22,10 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-Given a class `A` which has the attribute `name` and has a `slug` column defined, we can do the following:
+Given a class `SomeObject` which has the attribute `name` and has a `slug` column defined, we can do the following:
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name
 end
@@ -34,10 +34,29 @@ end
 This will take the value in `name` and automatically set the slug based on it. If the slug needs to be based on multiple attributes of a model, simply pass in the array of attributes as follows:
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug [:first_name, :last_name]
 end
+```
+
+Under the hood, this library adds a `before_validate` callback that automatically runs a method called `assign_slug`. You are welcome to call this method explicity if you so desire.
+
+```
+obj = SomeObject.new(name: 'Hello World!')
+obj.assign_slug
+```
+
+It is important to note that if the attribute used to hold the slug (`slug` by default, see next section) already contains a value, the slug assignment **WILL NOT HAPPEN**. This means, if you manually assign the slug by explicitly setting the slug value yourself, it will not be modified. If you would like the slug to be overwrriten you can call the `reassign_slug` method.
+
+```
+obj = SomeObject.new(name: 'Hello World!', slug: 'hi')
+
+# This will do nothing as the slug was already set
+obj.assign_slug
+
+# This will cause the slug to be assigned
+obj.reassign_slug
 ```
 
 ### Slug column
@@ -45,7 +64,7 @@ end
 By default it is assumed that the generated slug will be assigned to the `slug` attribute of the model. If one needs to place the slug in a different columm, this can be done by defining the `column` attribute:
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name, column: :some_other_column
 end
@@ -59,14 +78,14 @@ By default the maxium length of a slug is 32 characters *NOT INCLUDING* any pote
 
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name, limit_length: 15
 end
 ```
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name, limit_length: false
 end
@@ -74,21 +93,21 @@ end
 
 ### Slug Uniquness
 
-By default slugs are unique to the object that defines the slug. For example if we have the 2 objects, `A` and `B` as defined as below, then the slugs will be unique for all slugs for all type `A` objcets and all type `B` objects. 
+By default slugs are unique to the object that defines the slug. For example if we have the 2 objects, `SomeObject` and `SomeOtherObject` as defined as below, then the slugs will be unique for all slugs for all type `SomeObject` objcets and all type `SomeOtherObject` objects. 
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name
 end
 
-class B
+class SomeOtherObject
   include Schnecke
   slug :name
 end
 ```
 
-This means that the slug `foo` can exists 2 times; once for any object of type `A` and once for any object of type `B`. Currently there is no way to create globally unique slugs. If this is something that is required, then something like [`friendly_id`](https://github.com/norman/friendly_id) might be more appropriate for your use case.
+This means that the slug `foo` can exists 2 times; once for any object of type `SomeObject` and once for any object of type `SomeOtherObject`. Currently there is no way to create globally unique slugs. If this is something that is required, then something like [`friendly_id`](https://github.com/norman/friendly_id) might be more appropriate for your use case.
 
 ### Handling non-unique slugs
 
@@ -98,7 +117,7 @@ It is important to note that the maximum length of a slug does not include the a
 
 ### Defining a custom uniqueness scope
 
-There are times when we want slugs not be unique for all objects of type `A`, but rather for a smaller scope. For example, let's say we have a system with multiple `Accounts`, each containing `Record`s. If we want the slug for the `Record` to be unique only within the scope of an `account` we can do by providing the uniqueness scope when setting up the slug.
+There are times when we want slugs not be unique for all objects of type `SomeObject`, but rather for a smaller scope. For example, let's say we have a system with multiple `Accounts`, each containing `Record`s. If we want the slug for the `Record` to be unique only within the scope of an `account` we can do by providing the uniqueness scope when setting up the slug.
 
 ```ruby
 class Record
@@ -121,12 +140,33 @@ class Tag
 end
 ```
 
+### Callbacks
+
+Two callbacks, `before_assign_slug` and `after_assign_slug`, are provided so that you can run arbitrary code before and after the slug assignment process. Both of these callbacks will always run regardless of whether or not a slug is to be assigned. The only time `after_assign_slug` is not run is if there is an exception raised during the assignment process.
+
+Note, since `reassign_slug` is just a forced assignment of a slug, both callbacks will run as well.
+
+```ruby
+class SomeObject
+  include Schnecke
+  slug :name
+
+  def before_assign_slug(opts={})
+    puts 'Hello world! I get run before the slug assignment process'
+  end
+
+  def after_assign_slug(opts={})
+    puts 'Goodbye world! I get run after the slug assignment process'
+  end
+end
+```
+
 ### Advanced Usage
 
 If you need to change how the slug is generated, how duplicates are handled, etc., you can overwrite the methods in your class. For example to change how slugs are generated you can overwrite the `slugify` method.
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name
 
@@ -140,7 +180,7 @@ end
 Note, by default the library will validate to ensure that the slug only contains lowercase alpphanumeric letters and '-' or '_'. If your new method changes the alloweable set of characters you can either disable this validation, or pass in your own validation pattern.
 
 ```ruby
-class A
+class SomeObject
   include Schnecke
   slug :name, require_format: false
 
@@ -149,7 +189,7 @@ class A
   end
 end
 
-class B
+class SomeOtherObject
   include Schnecke
   slug :name, require_format: /\A[a-z]+\z/
 
