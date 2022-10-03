@@ -136,7 +136,7 @@ module Schnecke
     #
     # This can be overriden if a different slug generation method is needed
     def slugify(str)
-      return if str.blank?
+      return str if str.blank?
 
       str = str.gsub(/[\p{Pc}\p{Ps}\p{Pe}\p{Pi}\p{Pf}\p{Po}]/, '')
       str.parameterize
@@ -161,7 +161,7 @@ module Schnecke
     #
     # This can be overriden if a different behavior is desired
     def slugify_duplicate(slug)
-      return if slug.blank?
+      return slug if slug.blank?
 
       seq = 2
       new_slug = slug_concat([slug, seq])
