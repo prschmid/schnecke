@@ -63,7 +63,7 @@ obj.reassign_slug
 
 There are times when the source of the slug needs to be set based on some other values (e.g. a parent object, random number, etc). In this case, simply define a method that is to be used to set the soure of the slug. This method can be public, protected, or private.
 
-```
+```ruby
 class SomeObject
   include Schnecke
   slug :parent_slug
@@ -80,7 +80,7 @@ end
 
 Just like if one is using a plain old attributes, one can mix and match methods and attributes if the slug is to be derived from multiple sources
 
-```
+```ruby
 class SomeObject
   include Schnecke
   slug [:name, :parent_slug]
