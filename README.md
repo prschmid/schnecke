@@ -59,6 +59,44 @@ obj.assign_slug
 obj.reassign_slug
 ```
 
+### Using a method to define a slug source
+
+There are times when the source of the slug needs to be set based on some other values (e.g. a parent object, random number, etc). In this case, simply define a method that is to be used to set the soure of the slug. This method can be public, protected, or private.
+
+```ruby
+class SomeObject
+  include Schnecke
+  slug :parent_slug
+
+  belongs_to :parent_object
+
+  protected
+
+  def parent_slug
+    parent_object.slug
+  end
+end
+```
+
+Just like if one is using a plain old attributes, one can mix and match methods and attributes if the slug is to be derived from multiple sources
+
+```ruby
+class SomeObject
+  include Schnecke
+  slug [:name, :parent_slug]
+
+  belongs_to :parent_object
+
+  protected
+
+  def parent_slug
+    parent_object.slug
+  end
+end
+```
+
+And this will take the `:name` attribute and the result from `parent_slug` and create a slug from the two things combined. 
+
 ### Slug column
 
 By default it is assumed that the generated slug will be assigned to the `slug` attribute of the model. If one needs to place the slug in a different columm, this can be done by defining the `column` attribute:
