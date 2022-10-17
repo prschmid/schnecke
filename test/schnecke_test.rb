@@ -140,6 +140,22 @@ class SchneckeTest < Minitest::Test
     assert_equal 'this-name-has-more-than-32-chara-2', obj2.slug
   end
 
+  def test_can_use_a_method_as_slug_source
+    create_dummy_schnecke_models_using_methods_as_slug_source_table
+
+    obj1 = DummySchneckePublicSlugSourceMethodModel.create
+    assert_equal 'public-slug-source', obj1.slug
+
+    obj2 = DummySchneckeProtectedSlugSourceMethodModel.create
+    assert_equal 'protected-slug-source', obj2.slug
+
+    obj3 = DummySchneckePrivateSlugSourceMethodModel.create
+    assert_equal 'private-slug-source', obj3.slug
+
+    obj3 = DummySchneckeMultiSlugSourceMethodModel.create
+    assert_equal 'method-1-method-2', obj3.slug
+  end
+
   def test_can_change_maximum_length_of_slug
     create_dummy_schnecke_short_slug_models_table
 
@@ -291,6 +307,78 @@ class SchneckeTest < Minitest::Test
         t.string :name, null: false, default: 'name'
         t.string :slug
       end
+    end
+  end
+
+  def create_dummy_schnecke_models_using_methods_as_slug_source_table
+    Temping.create :dummy_schnecke_public_slug_source_method_models do
+      include Schnecke
+      slug :slug_source
+
+      with_columns do |t|
+        t.string :slug
+      end
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def slug_source
+        'public slug source'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
+    end
+
+    Temping.create :dummy_schnecke_protected_slug_source_method_models do
+      include Schnecke
+      slug :slug_source
+
+      with_columns do |t|
+        t.string :slug
+      end
+
+      protected
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def slug_source
+        'protected slug source'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
+    end
+
+    Temping.create :dummy_schnecke_private_slug_source_method_models do
+      include Schnecke
+      slug :slug_source
+
+      with_columns do |t|
+        t.string :slug
+      end
+
+      private
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def slug_source
+        'private slug source'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
+    end
+
+    Temping.create :dummy_schnecke_multi_slug_source_method_models do
+      include Schnecke
+      slug %i[slug_source1 slug_source2]
+
+      with_columns do |t|
+        t.string :slug
+      end
+
+      private
+
+      # rubocop:disable Lint/NestedMethodDefinition
+      def slug_source1
+        'method 1'
+      end
+
+      def slug_source2
+        'method 2'
+      end
+      # rubocop:enable Lint/NestedMethodDefinition
     end
   end
 

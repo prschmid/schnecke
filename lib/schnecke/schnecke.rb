@@ -189,7 +189,7 @@ module Schnecke
     def validate_slug_source
       source = arrayify(schnecke_config[:slug_source])
       source.each do |attr|
-        unless respond_to?(attr)
+        unless respond_to?(attr, true)
           raise ArgumentError,
                 "Source '#{attr}' does not exist."
         end
