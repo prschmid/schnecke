@@ -13,7 +13,7 @@ commands:
       - run:
           name: Set up bundler
           command: |
-            gem install bundler:2.3.22
+            gem install bundler:2.3.26
       - run:
           name: Bundle Install
           command: |
@@ -46,7 +46,7 @@ jobs:
     resource_class: small
 
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.1.3
 
     steps:
       # --------- SETUP ---------
@@ -73,7 +73,7 @@ jobs:
     resource_class: small
 
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.1.3
 
     steps:
       # --------- SETUP ---------
