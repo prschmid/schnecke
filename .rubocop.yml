@@ -8,15 +8,7 @@ AllCops:
   NewCops: enable
   # Don't run rubocop on these files/directories
   Exclude:
-    - '**/templates/**/*'
-    - '**/vendor/**/*'
-    - 'actionpack/lib/action_dispatch/journey/parser.rb'
-    - 'lib/templates/**/*'
-    - 'db/**/*'
-    - 'config/**/*'
-    - 'vendor/**/*'
     - 'bin/**/*'
-    - 'node_modules/**/*'
 
 Layout/LineLength:
   Max: 80
@@ -29,8 +21,8 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 40
   Exclude:
-    - 'test/**/*'
     - 'schnecke.gemspec'
+    - 'test/**/*'
 
 Metrics/ClassLength:
   Max: 150
