@@ -8,10 +8,10 @@ require 'active_support/concern'
 module Schnecke
   extend ActiveSupport::Concern
 
-  DEFAULT_SLUG_COLUMN = :slug
-  DEFAULT_SLUG_SEPARATOR = '-'
-  DEFAULT_MAX_LENGTH = 32
-  DEFAULT_REQUIRED_FORMAT = /\A[a-z0-9\-_]+\z/
+  SCHNECKE_DEFAULT_SLUG_COLUMN = :slug
+  SCHNECKE_DEFAULT_SLUG_SEPARATOR = '-'
+  SCHNECKE_DEFAULT_MAX_LENGTH = 32
+  SCHNECKE_DEFAULT_REQUIRED_FORMAT = /\A[a-z0-9\-_]+\z/
 
   class_methods do
     # rubocop:disable Metrics/AbcSize
@@ -21,12 +21,14 @@ module Schnecke
       # Save the configuration
       self.schnecke_config = {
         slug_source: source,
-        slug_column: opts.fetch(:column, DEFAULT_SLUG_COLUMN),
-        slug_separator: opts.fetch(:separator, DEFAULT_SLUG_SEPARATOR),
-        limit_length: opts.fetch(:limit_length, DEFAULT_MAX_LENGTH),
+        slug_column: opts.fetch(:column, SCHNECKE_DEFAULT_SLUG_COLUMN),
+        slug_separator: opts.fetch(:separator, SCHNECKE_DEFAULT_SLUG_SEPARATOR),
+        limit_length: opts.fetch(:limit_length, SCHNECKE_DEFAULT_MAX_LENGTH),
         required: opts.fetch(:required, true),
         generate_on_blank: opts.fetch(:generate_on_blank, true),
-        require_format: opts.fetch(:require_format, DEFAULT_REQUIRED_FORMAT),
+        require_format: opts.fetch(
+          :require_format, SCHNECKE_DEFAULT_REQUIRED_FORMAT
+        ),
         uniqueness: opts.fetch(:uniqueness, {})
       }
 
@@ -52,8 +54,8 @@ module Schnecke
 
       include InstanceMethods
     end
+    # rubocop:enable Metrics/AbcSize
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Instance methods to include
   module InstanceMethods
