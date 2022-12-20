@@ -54,6 +54,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rubocop-rake', '>= 0')
   spec.add_development_dependency('ruby_audit', '>= 0')
   spec.add_development_dependency('sqlite3', '>= 0')
+  spec.add_development_dependency('temping', '~> 4.0')
   spec.add_runtime_dependency('activerecord', '> 4.2.0')
   spec.add_runtime_dependency('activesupport', '> 4.2.0')
   spec.metadata['rubygems_mfa_required'] = 'true'

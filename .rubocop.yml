@@ -16,7 +16,6 @@ AllCops:
     - 'config/**/*'
     - 'vendor/**/*'
     - 'bin/**/*'
-    - 'node_modules/**/*'
 
 Layout/LineLength:
   Max: 80
@@ -29,8 +28,8 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 40
   Exclude:
-    - 'test/**/*'
     - 'schnecke.gemspec'
+    - 'test/**/*'
 
 Metrics/ClassLength:
   Max: 150

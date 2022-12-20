@@ -9,5 +9,3 @@ require 'schnecke'
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3', database: ':memory:'
 )
-
-load("#{File.dirname(__FILE__)}/temping.rb")

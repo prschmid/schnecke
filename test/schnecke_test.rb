@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'temping'
 
 class SchneckeTest < Minitest::Test
   NAME_WITH_UNSAFE_CHARACTERS = '----!@@foo!!!!---bar %  baz------^&*'
@@ -18,6 +19,7 @@ class SchneckeTest < Minitest::Test
 
     obj = DummySchneckeModel.create!(name: 'Test Schnecke')
     obj.slug = nil
+
     assert_nil obj.slug
     assert_predicate obj, :invalid?
 
@@ -30,6 +32,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_table
 
     obj = DummySchneckeModel.new(name: 'Test Schnecke')
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -41,6 +44,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_table
 
     obj = DummySchneckeModel.new(name: 'Test Schnecke', slug: 'already-has-one')
+
     assert_equal 'already-has-one', obj.slug
 
     obj.assign_slug
@@ -52,6 +56,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_table
 
     obj = DummySchneckeModel.new(name: 'Test Schnecke')
+
     assert_nil obj.slug
 
     obj.reassign_slug
@@ -63,6 +68,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_table
 
     obj = DummySchneckeModel.new(name: 'Test Schnecke', slug: 'already-has-one')
+
     assert_equal 'already-has-one', obj.slug
 
     obj.reassign_slug
@@ -84,6 +90,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_table
 
     obj = DummySchneckeModel.new(name: NAME_WITH_UNSAFE_CHARACTERS)
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -96,10 +103,12 @@ class SchneckeTest < Minitest::Test
 
     name = 'Duplicate Name'
     obj1 = DummySchneckeModel.create!(name:)
+
     assert_equal 'duplicate-name', obj1.slug
 
     obj2 = DummySchneckeModel.new(name:)
     obj2.assign_slug
+
     assert_equal 'duplicate-name-2', obj2.slug
     obj2.save!
 
@@ -107,6 +116,7 @@ class SchneckeTest < Minitest::Test
 
     obj3 = DummySchneckeModel.new(name:)
     obj3.assign_slug
+
     assert_equal 'duplicate-name-2', obj3.slug
   end
 
@@ -116,6 +126,7 @@ class SchneckeTest < Minitest::Test
     obj = DummySchneckeModel.new(
       name: 'This name has more than 32 characters and will be truncated'
     )
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -130,12 +141,14 @@ class SchneckeTest < Minitest::Test
     obj1 = DummySchneckeModel.create(
       name: 'This name has more than 32 characters and will be truncated'
     )
+
     assert_equal 32, obj1.slug.length
     assert_equal 'this-name-has-more-than-32-chara', obj1.slug
 
     obj2 = DummySchneckeModel.create(
       name: 'This name has more than 32 characters and will be truncated'
     )
+
     assert_equal 34, obj2.slug.length
     assert_equal 'this-name-has-more-than-32-chara-2', obj2.slug
   end
@@ -144,15 +157,19 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_models_using_methods_as_slug_source_table
 
     obj1 = DummySchneckePublicSlugSourceMethodModel.create
+
     assert_equal 'public-slug-source', obj1.slug
 
     obj2 = DummySchneckeProtectedSlugSourceMethodModel.create
+
     assert_equal 'protected-slug-source', obj2.slug
 
     obj3 = DummySchneckePrivateSlugSourceMethodModel.create
+
     assert_equal 'private-slug-source', obj3.slug
 
     obj3 = DummySchneckeMultiSlugSourceMethodModel.create
+
     assert_equal 'method-1-method-2', obj3.slug
   end
 
@@ -164,6 +181,7 @@ class SchneckeTest < Minitest::Test
     obj = DummySchneckeShortSlugModel.new(
       name: 'This name has more than 15 characters and will be truncated'
     )
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -176,6 +194,7 @@ class SchneckeTest < Minitest::Test
     create_dummy_schnecke_non_default_column_models_table
 
     obj = DummySchneckeNonDefaultColumnModel.new(name: 'Test Schnecke')
+
     assert_nil obj.slug
     assert_nil obj.another_slug_column
 
@@ -192,6 +211,7 @@ class SchneckeTest < Minitest::Test
       first_name: 'First',
       last_name: 'Last Schnecke'
     )
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -207,12 +227,14 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent1.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent', child11.slug
 
     child12 = DummySchneckeUniqueScopeModel.create!(
       dummy_schnecke_association_model_id: parent1.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent-2', child12.slug
 
     parent2 = DummySchneckeAssociationModel.create!(name: 'Parent 2')
@@ -220,12 +242,14 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent2.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent', child21.slug
 
     child22 = DummySchneckeUniqueScopeModel.create!(
       dummy_schnecke_association_model_id: parent2.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent-2', child22.slug
   end
 
@@ -239,6 +263,7 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent1.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent', child11.slug
 
     child12 = DummySchneckeUniqueScopePolymorphicModel.create!(
@@ -247,6 +272,7 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent1.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent-2', child12.slug
 
     parent2 = DummySchneckePolymorphicAssociationModel.create!(name: 'Parent 2')
@@ -256,6 +282,7 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent2.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent', child21.slug
 
     child22 = DummySchneckeUniqueScopePolymorphicModel.create!(
@@ -264,6 +291,7 @@ class SchneckeTest < Minitest::Test
       dummy_schnecke_association_model_id: parent2.id,
       name: 'child of parent'
     )
+
     assert_equal 'child-of-parent-2', child22.slug
   end
 
@@ -273,6 +301,7 @@ class SchneckeTest < Minitest::Test
     obj = DummySchneckeBeforeAssignmentCallbackModel.new(
       name: 'This will be overwrriten by the before assign callback'
     )
+
     assert_nil obj.slug
 
     obj.assign_slug
@@ -287,6 +316,7 @@ class SchneckeTest < Minitest::Test
     obj = DummySchneckeAfterAssignmentCallbackModel.new(
       name: 'This name will stay the same. Slug will be changed.'
     )
+
     assert_nil obj.slug
 
     obj.assign_slug
