@@ -1,6 +1,7 @@
 # Schnecke
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/prschmid/schnecke/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/prschmid/schnecke/tree/main)
+[![Gem Version](https://badge.fury.io/rb/schnecke.svg)](https://badge.fury.io/rb/schnecke)
 
 A very simple gem to enable ActiveRecord models to have slugs.
 
