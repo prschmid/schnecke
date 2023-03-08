@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    schnecke (0.4.3)
+    schnecke (0.4.4)
       activerecord (> 4.2.0)
       activesupport (> 4.2.0)
 
