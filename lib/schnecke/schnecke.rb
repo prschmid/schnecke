@@ -199,7 +199,7 @@ module Schnecke
     end
 
     def validate_slug_column
-      return if respond_to?("#{schnecke_config[:slug_column]}=")
+      return if respond_to?(:"#{schnecke_config[:slug_column]}=")
 
       raise ArgumentError,
             "Slug column '#{schnecke_config[:slug_column]}' does not " \
