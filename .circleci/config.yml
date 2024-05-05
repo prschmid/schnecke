@@ -46,7 +46,7 @@ jobs:
     resource_class: small
 
     docker:
-      - image: cimg/ruby:3.2.2
+      - image: cimg/ruby:3.2.4
 
     steps:
       # --------- SETUP ---------
@@ -73,7 +73,7 @@ jobs:
     resource_class: small
 
     docker:
-      - image: cimg/ruby:3.2.2
+      - image: cimg/ruby:3.2.4
 
     steps:
       # --------- SETUP ---------
