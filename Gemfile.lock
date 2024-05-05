@@ -78,8 +78,8 @@ GEM
     ruby-progressbar (1.13.0)
     ruby_audit (2.3.0)
       bundler-audit (~> 0.9.0)
-    sqlite3 (2.0.1-x86_64-darwin)
-    sqlite3 (2.0.1-x86_64-linux-gnu)
+    sqlite3 (1.7.3-x86_64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     temping (4.1.1)
       activerecord (>= 6.0, < 7.2)
       activesupport (>= 6.0, < 7.2)
@@ -107,8 +107,8 @@ DEPENDENCIES
   rubocop-rake
   ruby_audit
   schnecke!
-  sqlite3
+  sqlite3 (~> 1.7)
   temping (~> 4.0)
 
 BUNDLED WITH
-   2.3.26
+   2.4.19
