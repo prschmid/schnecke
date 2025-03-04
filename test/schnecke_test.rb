@@ -6,9 +6,7 @@ require 'temping'
 class SchneckeTest < Minitest::Test
   NAME_WITH_UNSAFE_CHARACTERS = '----!@@foo!!!!---bar %  baz------^&*'
 
-  def teardown
-    Temping.teardown
-  end
+  delegate :teardown, to: :Temping
 
   def test_that_it_has_a_version_number
     refute_nil ::Schnecke::VERSION
