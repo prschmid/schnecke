@@ -10,7 +10,7 @@ gemspec
 gem 'bundler', '~> 2.3'
 gem 'bundler-audit', '>= 0'
 gem 'minitest', '~> 5.0'
-gem 'rake', '~> 12.3'
+gem 'rake', '~> 13.2'
 gem 'rubocop', '>= 0'
 gem 'rubocop-minitest', '>= 0'
 gem 'rubocop-performance', '>= 0'
