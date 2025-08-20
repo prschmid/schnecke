@@ -329,6 +329,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_models_table
     Temping.create :dummy_schnecke_models do
       include Schnecke
+
       slug :name
 
       with_columns do |t|
@@ -341,6 +342,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_models_using_methods_as_slug_source_table
     Temping.create :dummy_schnecke_public_slug_source_method_models do
       include Schnecke
+
       slug :slug_source
 
       with_columns do |t|
@@ -356,6 +358,7 @@ class SchneckeTest < Minitest::Test
 
     Temping.create :dummy_schnecke_protected_slug_source_method_models do
       include Schnecke
+
       slug :slug_source
 
       with_columns do |t|
@@ -373,6 +376,7 @@ class SchneckeTest < Minitest::Test
 
     Temping.create :dummy_schnecke_private_slug_source_method_models do
       include Schnecke
+
       slug :slug_source
 
       with_columns do |t|
@@ -390,6 +394,7 @@ class SchneckeTest < Minitest::Test
 
     Temping.create :dummy_schnecke_multi_slug_source_method_models do
       include Schnecke
+
       slug %i[slug_source1 slug_source2]
 
       with_columns do |t|
@@ -413,6 +418,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_short_slug_models_table
     Temping.create :dummy_schnecke_short_slug_models do
       include Schnecke
+
       slug :name, limit_length: 15
 
       with_columns do |t|
@@ -425,6 +431,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_non_default_column_models_table
     Temping.create :dummy_schnecke_non_default_column_models do
       include Schnecke
+
       slug :name, column: :another_slug_column
 
       with_columns do |t|
@@ -438,6 +445,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_multi_source_models_table
     Temping.create :dummy_schnecke_multi_source_models do
       include Schnecke
+
       slug %i[first_name last_name]
 
       with_columns do |t|
@@ -458,6 +466,7 @@ class SchneckeTest < Minitest::Test
 
     Temping.create :dummy_schnecke_unique_scope_models do
       include Schnecke
+
       slug :name, uniqueness: { scope: [:dummy_schnecke_association_model] }
 
       belongs_to :dummy_schnecke_association_model
@@ -480,6 +489,7 @@ class SchneckeTest < Minitest::Test
 
     Temping.create :dummy_schnecke_unique_scope_polymorphic_models do
       include Schnecke
+
       slug :name,
            uniqueness: {
              scope: %i[
@@ -502,6 +512,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_before_assignment_callback_models_table
     Temping.create :dummy_schnecke_before_assignment_callback_models do
       include Schnecke
+
       slug :name
 
       # rubocop:disable Lint/NestedMethodDefinition
@@ -520,6 +531,7 @@ class SchneckeTest < Minitest::Test
   def create_dummy_schnecke_after_assignment_callback_models_table
     Temping.create :dummy_schnecke_after_assignment_callback_models do
       include Schnecke
+
       slug :name
 
       # rubocop:disable Lint/NestedMethodDefinition
