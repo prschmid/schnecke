@@ -89,8 +89,8 @@ GEM
     ruby_audit (3.0.0)
       bundler-audit (~> 0.9.0)
     securerandom (0.4.1)
-    sqlite3 (2.7.3-x86_64-darwin)
-    sqlite3 (2.7.3-x86_64-linux-gnu)
+    sqlite3 (2.7.4-x86_64-darwin)
+    sqlite3 (2.7.4-x86_64-linux-gnu)
     temping (4.3.0)
       activerecord (>= 6.0, < 8.1)
       activesupport (>= 6.0, < 8.1)
@@ -121,7 +121,7 @@ DEPENDENCIES
   rubocop-rake
   ruby_audit
   schnecke!
-  sqlite3 (~> 2.0, >= 2.0.2)
+  sqlite3 (~> 2.7)
   temping (~> 4.0)
 
 BUNDLED WITH
