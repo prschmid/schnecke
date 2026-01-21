@@ -88,8 +88,16 @@ GEM
     ruby_audit (3.1.0)
       bundler-audit (~> 0.9.0)
     securerandom (0.4.1)
+    sqlite3 (2.9.0-aarch64-linux-gnu)
+    sqlite3 (2.9.0-aarch64-linux-musl)
+    sqlite3 (2.9.0-arm-linux-gnu)
+    sqlite3 (2.9.0-arm-linux-musl)
+    sqlite3 (2.9.0-arm64-darwin)
+    sqlite3 (2.9.0-x86-linux-gnu)
+    sqlite3 (2.9.0-x86-linux-musl)
     sqlite3 (2.9.0-x86_64-darwin)
     sqlite3 (2.9.0-x86_64-linux-gnu)
+    sqlite3 (2.9.0-x86_64-linux-musl)
     temping (4.4.0)
       activerecord (>= 6.0, < 8.2)
       activesupport (>= 6.0, < 8.2)
@@ -103,13 +111,19 @@ GEM
     uri (1.1.1)
 
 PLATFORMS
-  x86_64-darwin-21
-  x86_64-darwin-22
-  x86_64-darwin-23
-  x86_64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
-  bundler (~> 2.3)
+  bundler (~> 2.6)
   bundler-audit
   minitest (~> 5.0)
   rake (~> 13.2)
@@ -124,4 +138,4 @@ DEPENDENCIES
   temping (~> 4.0)
 
 BUNDLED WITH
-   2.4.19
+   2.6.9
