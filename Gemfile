@@ -7,7 +7,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 # Specify your gem's dependencies in schnecke.gemspec
 gemspec
 
-gem 'bundler', '~> 2.3'
+gem 'bundler', '~> 2.6'
 gem 'bundler-audit', '>= 0'
 gem 'minitest', '~> 5.0'
 gem 'rake', '~> 13.2'
